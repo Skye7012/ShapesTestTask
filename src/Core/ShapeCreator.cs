@@ -1,3 +1,5 @@
+using Core.Shapes;
+
 namespace Core;
 
 /// <summary>
@@ -18,7 +20,7 @@ public static class ShapeCreator
 				x.Name == shapeName
 				&& !x.IsAbstract
 				&& x.IsAssignableTo(typeof(IShape)))
-			?? throw new Exception($"Не найдена фигура с наименованием {shapeName}");
+			?? throw new NotFoundShapeException(shapeName);
 
 		return Create(shapeType, shapeArgs);
 	}
@@ -31,20 +33,23 @@ public static class ShapeCreator
 	/// <returns>Фигура</returns>
 	public static IShape Create(Type shapeType, params object[] shapeArgs)
 	{
-		var isShapeTypeValid = shapeType.IsAssignableTo(typeof(IShape))
+		var isShapeTypeValid = (typeof(IShape)).IsAssignableFrom(shapeType)
 			&& !shapeType.IsAbstract
 			&& !shapeType.IsInterface;
 		
 		if (!isShapeTypeValid)
-			throw new Exception($"Ошибка: переданный тип {shapeType.Name} не реализует интерфейс {nameof(IShape)}");
+			throw new NotAssignableFromIShapeException(shapeType.Name);
 
 		try
 		{
 			return (IShape)Activator.CreateInstance(shapeType, shapeArgs)!;
 		}
-		catch
+		catch (Exception ex)
 		{
-			throw new Exception($"Не удалось создать {shapeType.Name} с заданными параметрами {nameof(shapeArgs)}");
+			if(ex.InnerException is ValidationException)
+				throw;
+
+			throw new NotValidShapeConstructorArgumentsException(shapeType.Name);
 		}
 	}
 }

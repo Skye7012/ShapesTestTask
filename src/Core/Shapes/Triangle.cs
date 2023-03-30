@@ -1,4 +1,4 @@
-﻿namespace Core;
+namespace Core.Shapes;
 
 /// <summary>
 /// Треугольник
@@ -16,22 +16,24 @@ public class Triangle : IShape
 		FirstSide = firstSide;
 		SecondSide = secondSide;
 		ThirdSide = thirdSide;
+
+		Validate();
 	}
 
 	/// <summary>
 	/// Первая сторона треугольника
 	/// </summary>
-	public double FirstSide { get; set; }
+	public double FirstSide { get; private set; }
 
 	/// <summary>
 	/// Вторая сторона треугольника
 	/// </summary>
-	public double SecondSide { get; set; }
+	public double SecondSide { get; private set; }
 
 	/// <summary>
 	/// Третья сторона треугольника
 	/// </summary>
-	public double ThirdSide { get; set; }
+	public double ThirdSide { get; private set; }
 
 	/// <summary>
 	/// Стороны треугольника
@@ -68,10 +70,10 @@ public class Triangle : IShape
 		for (int i = 0; i < Sides.Count(); i++)
 		{
 			var firstSide = Sides[i];
-			var secondSide = Sides[(i + 1) % 2];
-			var thirdSide = Sides[(i + 2) % 2];
+			var secondSide = Sides[(i + 1) % 3];
+			var thirdSide = Sides[(i + 2) % 3];
 
-			if (firstSide * firstSide == (secondSide * secondSide + thirdSide * thirdSide))
+			if (firstSide * firstSide == secondSide * secondSide + thirdSide * thirdSide)
 			{
 				legs[0] = secondSide;
 				legs[1] = thirdSide;
@@ -80,5 +82,29 @@ public class Triangle : IShape
 		}
 
 		return false;
+	}
+
+	/// <summary>
+	/// Провести валидацию
+	/// </summary>
+	private void Validate()
+	{
+		if (Sides.Any(x => x <= 0))
+			throw new ValidationException("Стороны треугольника должна быть больше нуля");
+
+		for (int i = 0; i < Sides.Count(); i++)
+		{
+			var firstSide = Sides[i];
+			var secondSide = Sides[(i + 1) % 3];
+			var thirdSide = Sides[(i + 2) % 3];
+
+			if (firstSide > secondSide + thirdSide)
+			{
+				throw new ValidationException("Длина любой стороны треугольника не может быть " +
+					"больше суммы длин двух других сторон: " +
+					$"{firstSide} > {secondSide} + {thirdSide}");
+			}
+		}
+
 	}
 }
