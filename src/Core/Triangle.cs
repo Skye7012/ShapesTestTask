@@ -41,7 +41,7 @@ public class Triangle : IShape
 	/// <inheritdoc/>
 	public double GetArea()
 	{
-		var semiPerimeter = Sides.Aggregate((a, b) => a + b);
+		var semiPerimeter = Sides.Aggregate((a, b) => a + b) / 2;
 		return Math.Sqrt(
 			semiPerimeter
 			* (semiPerimeter - FirstSide)
@@ -75,6 +75,7 @@ public class Triangle : IShape
 			{
 				legs[0] = secondSide;
 				legs[1] = thirdSide;
+				return true;
 			}
 		}
 

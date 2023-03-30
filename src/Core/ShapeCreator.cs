@@ -1,4 +1,4 @@
-﻿namespace Core;
+namespace Core;
 
 /// <summary>
 /// Создатель фигур
@@ -6,12 +6,12 @@
 public static class ShapeCreator
 {
 	/// <summary>
-	/// Получить площадь фигуры
+	/// Создать фигуру
 	/// </summary>
 	/// <param name="shapeName">Наименование фигуры</param>
 	/// <param name="shapeArgs">Аргументы для создания фигуры</param>
-	/// <returns>Площадь фигуры</returns>
-	public static IShape GetShape(string shapeName, params object[] shapeArgs)
+	/// <returns>Фигура</returns>
+	public static IShape Create(string shapeName, params object[] shapeArgs)
 	{
 		var shapeType = typeof(Circle).Assembly.ExportedTypes
 			.FirstOrDefault(x =>
@@ -20,16 +20,16 @@ public static class ShapeCreator
 				&& x.IsAssignableTo(typeof(IShape)))
 			?? throw new Exception($"Не найдена фигура с наименованием {shapeName}");
 
-		return GetShape(shapeType, shapeArgs);
+		return Create(shapeType, shapeArgs);
 	}
 
 	/// <summary>
-	/// Получить площадь фигуры
+	/// Создать фигуру
 	/// </summary>
 	/// <param name="shapeType">Тип фигуры</param>
 	/// <param name="shapeArgs">Аргументы для создания фигуры</param>
-	/// <returns>Площадь фигуры</returns>
-	public static IShape GetShape(Type shapeType, params object[] shapeArgs)
+	/// <returns>Фигура</returns>
+	public static IShape Create(Type shapeType, params object[] shapeArgs)
 	{
 		var isShapeTypeValid = shapeType.IsAssignableTo(typeof(IShape))
 			&& !shapeType.IsAbstract
