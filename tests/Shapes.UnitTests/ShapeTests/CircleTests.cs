@@ -24,10 +24,10 @@ public class CircleTests
 	}
 
 	/// <summary>
-	/// Должен выбросить ошибку валидации при создании круга с отрицательным радиусом
+	/// Должен выбросить ошибку валидации при создании круга с радиусом <= 0
 	/// </summary>
 	[Fact]
-	public void Ctor_ShouldThrow_WhenGivenNegativeRadius()
+	public void Ctor_ShouldThrow_WhenGivenNotPositiveRadius()
 	{
 		var circleCreation = () => new Circle(-4);
 

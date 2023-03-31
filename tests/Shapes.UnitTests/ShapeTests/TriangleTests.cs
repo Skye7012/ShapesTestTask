@@ -11,10 +11,10 @@ namespace Shapes.UnitTests.ShapeTests;
 public class TriangleTests
 {
 	/// <summary>
-	/// Должен правильно подсчитать площадь, когда верно задан радиус
+	/// Должен правильно подсчитать площадь, когда верно заданы стороны треугольника
 	/// </summary>
 	[Fact]
-	public void GetArea_ShouldReturnArea_WhenGivenValidRadius()
+	public void GetArea_ShouldReturnArea_WhenGivenValidSides()
 	{
 		var triangle = new Triangle(3, 4, 5);
 
@@ -22,16 +22,23 @@ public class TriangleTests
 
 		result.Should().Be(6);
 	}
-	
+
 	/// <summary>
 	/// Должен вернуть true, если треугольник прямоугольный
 	/// </summary>
+	/// <param name="firstSide">Первая сторона треугольника</param>
+	/// <param name="secondSide">Вторая сторона треугольника</param>
+	/// <param name="thirdSide">Третья сторона треугольника</param>
+	/// <param name="isRight">Является ли треугольник прямоугольным</param>
 	[Theory]
 	[InlineData(5, 4, 3, true)]
 	[InlineData(4, 5, 3, true)]
 	[InlineData(3, 4, 6, false)]
 	public void IsRight_ShouldReturnTrue_WhenTriangleIsRight(
-		double firstSide, double secondSide, double thirdSide, bool isRight)
+		double firstSide,
+		double secondSide,
+		double thirdSide,
+		bool isRight)
 	{
 		var triangle = new Triangle(firstSide, secondSide, thirdSide);
 
@@ -41,10 +48,10 @@ public class TriangleTests
 	}
 
 	/// <summary>
-	/// Должен выбросить ошибку валидации при создании треугольника с отрицательной стороной
+	/// Должен выбросить ошибку валидации при создании треугольника с стороной <= 0
 	/// </summary>
 	[Fact]
-	public void Ctor_ShouldThrow_WhenGivenNegativeSide()
+	public void Ctor_ShouldThrow_WhenGivenNotPositiveSide()
 	{
 		var circleCreation = () => new Triangle(-1, 3, 2);
 
