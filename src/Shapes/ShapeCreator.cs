@@ -1,6 +1,7 @@
-using Core.Shapes;
+using Shapes.Exceptions;
+using Shapes.Shapes;
 
-namespace Core;
+namespace Shapes;
 
 /// <summary>
 /// Создатель фигур
@@ -33,10 +34,10 @@ public static class ShapeCreator
 	/// <returns>Фигура</returns>
 	public static IShape Create(Type shapeType, params object[] shapeArgs)
 	{
-		var isShapeTypeValid = (typeof(IShape)).IsAssignableFrom(shapeType)
+		var isShapeTypeValid = typeof(IShape).IsAssignableFrom(shapeType)
 			&& !shapeType.IsAbstract
 			&& !shapeType.IsInterface;
-		
+
 		if (!isShapeTypeValid)
 			throw new NotAssignableFromIShapeException(shapeType.Name);
 
@@ -46,7 +47,7 @@ public static class ShapeCreator
 		}
 		catch (Exception ex)
 		{
-			if(ex.InnerException is ValidationException)
+			if (ex.InnerException is ValidationException)
 				throw;
 
 			throw new NotValidShapeConstructorArgumentsException(shapeType.Name);

@@ -1,8 +1,9 @@
-using Core.Shapes;
 using FluentAssertions;
+using Shapes.Exceptions;
+using Shapes.Shapes;
 using Xunit;
 
-namespace Core.UnitTests;
+namespace Shapes.UnitTests;
 
 /// <summary>
 /// Тесты для <see cref="ShapeCreator"/>

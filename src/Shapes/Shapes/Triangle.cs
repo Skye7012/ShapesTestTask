@@ -1,4 +1,6 @@
-namespace Core.Shapes;
+using Shapes.Exceptions;
+
+namespace Shapes.Shapes;
 
 /// <summary>
 /// Треугольник

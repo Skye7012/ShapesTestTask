@@ -1,4 +1,6 @@
-namespace Core.Shapes;
+using Shapes.Exceptions;
+
+namespace Shapes.Shapes;
 
 /// <summary>
 /// Круг
@@ -20,8 +22,8 @@ public class Circle : IShape
 	/// <summary>
 	/// Радиус круга
 	/// </summary>
-	public double Radius 
-	{ 
+	public double Radius
+	{
 		get => _radius;
 		private set
 		{

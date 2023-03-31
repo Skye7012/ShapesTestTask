@@ -1,4 +1,6 @@
-namespace Core.Shapes;
+using Shapes.Shapes;
+
+namespace Shapes.Exceptions;
 
 /// <summary>
 /// Фигура не реализует <see cref="IShape"/>

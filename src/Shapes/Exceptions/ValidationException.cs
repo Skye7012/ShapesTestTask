@@ -1,4 +1,4 @@
-namespace Core.Shapes;
+namespace Shapes.Exceptions;
 
 /// <summary>
 /// Ошибка валидации

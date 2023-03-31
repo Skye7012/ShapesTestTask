@@ -1,8 +1,9 @@
-using Core.Shapes;
 using FluentAssertions;
+using Shapes.Exceptions;
+using Shapes.Shapes;
 using Xunit;
 
-namespace Core.UnitTests.ShapeTests;
+namespace Shapes.UnitTests.ShapeTests;
 
 /// <summary>
 /// Тесты для <see cref="Triangle"/>

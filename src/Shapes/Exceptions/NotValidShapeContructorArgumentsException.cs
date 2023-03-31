@@ -1,4 +1,4 @@
-namespace Core.Shapes;
+namespace Shapes.Exceptions;
 
 /// <summary>
 /// Ошибка не валидных аргументов для создания фигуры
