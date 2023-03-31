@@ -100,11 +100,11 @@ public class Triangle : IShape
 			var secondSide = Sides[(i + 1) % 3];
 			var thirdSide = Sides[(i + 2) % 3];
 
-			if (firstSide > secondSide + thirdSide)
+			if (firstSide >= secondSide + thirdSide)
 			{
-				throw new ValidationException("Длина любой стороны треугольника не может быть " +
-					"больше суммы длин двух других сторон: " +
-					$"{firstSide} > {secondSide} + {thirdSide}");
+				throw new ValidationException("Каждая сторона треугольника должна быть " +
+					"меньше суммы двух других сторон: " +
+					$"{firstSide} >= {secondSide} + {thirdSide}");
 			}
 		}
 
