@@ -56,34 +56,13 @@ public class Triangle : IShape
 	/// <summary>
 	/// Является ли прямоугольным
 	/// </summary>
+	/// <param name="epsilon">Погрешность</param>
 	/// <returns>Является ли прямоугольным</returns>
-	public bool IsRight()
-		=> IsRight(out var legs);
-
-	/// <summary>
-	/// Является ли прямоугольным
-	/// </summary>
-	/// <param name="legs">Катеты</param>
-	/// <returns>Является ли прямоугольным</returns>
-	private bool IsRight(out double[] legs)
+	public bool IsRight(double epsilon = 0.00001)
 	{
-		legs = new double[2];
-
-		for (int i = 0; i < Sides.Count(); i++)
-		{
-			var firstSide = Sides[i];
-			var secondSide = Sides[(i + 1) % 3];
-			var thirdSide = Sides[(i + 2) % 3];
-
-			if (firstSide * firstSide == secondSide * secondSide + thirdSide * thirdSide)
-			{
-				legs[0] = secondSide;
-				legs[1] = thirdSide;
-				return true;
-			}
-		}
-
-		return false;
+		var sides = Sides;
+		Array.Sort(sides);
+		return Math.Abs(Math.Pow(sides[2], 2) - (Math.Pow(sides[0], 2) + Math.Pow(sides[1], 2))) < epsilon;
 	}
 
 	/// <summary>
@@ -94,19 +73,10 @@ public class Triangle : IShape
 		if (Sides.Any(x => x <= 0))
 			throw new ValidationException("Стороны треугольника должна быть больше нуля");
 
-		for (int i = 0; i < Sides.Count(); i++)
-		{
-			var firstSide = Sides[i];
-			var secondSide = Sides[(i + 1) % 3];
-			var thirdSide = Sides[(i + 2) % 3];
+		var sides = Sides;
+		Array.Sort(sides);
 
-			if (firstSide >= secondSide + thirdSide)
-			{
-				throw new ValidationException("Каждая сторона треугольника должна быть " +
-					"меньше суммы двух других сторон: " +
-					$"{firstSide} >= {secondSide} + {thirdSide}");
-			}
-		}
-
+		if (sides[2] >= sides[1] + sides[0])
+			throw new ViolateTriangleInequalityTheoremException(sides[2], sides[1], sides[0]);
 	}
 }
