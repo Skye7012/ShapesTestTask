@@ -1,6 +1,8 @@
 using FluentAssertions;
 using Shapes.Exceptions;
 using Shapes.Shapes;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace Shapes.UnitTests.ShapeTests;
@@ -48,14 +50,27 @@ public class TriangleTests
 	}
 
 	/// <summary>
+	/// Должен вернуть true, учитывая погрешность double
+	/// </summary>
+	[Fact]
+	public void IsRight_ShouldReturnTrue_WhenSidesHaveDoublePrecisionLimitation()
+	{
+		var triangle = new Triangle(2 * Math.Sqrt(2), 2 * Math.Sqrt(2), 4);
+
+		var result = triangle.IsRight();
+
+		result.Should().Be(true);
+	}
+
+	/// <summary>
 	/// Должен выбросить ошибку валидации при создании треугольника с стороной <= 0
 	/// </summary>
 	[Fact]
 	public void Ctor_ShouldThrow_WhenGivenNotPositiveSide()
 	{
-		var circleCreation = () => new Triangle(-1, 3, 2);
+		var triangleCreation = () => new Triangle(-1, 3, 2);
 
-		circleCreation.Should()
+		triangleCreation.Should()
 			.Throw<ValidationException>()
 			.WithMessage("Стороны треугольника должна быть больше нуля");
 	}
@@ -64,15 +79,21 @@ public class TriangleTests
 	/// Должен выбросить ошибку валидации при создании треугольника
 	/// с нарушением теоремы о неравенстве треугольника
 	/// </summary>
-	[Fact]
-	public void Ctor_ShouldThrow_WhenGivenBreakTriangleInequalityTheorem()
+	/// <param name="sides">Стороны треугольника</param>
+	[Theory]
+	[InlineData(new double[] { 4, 10, 2 })]
+	[InlineData(new double[] { 10, 2, 4 })]
+	[InlineData(new double[] { 4, 2, 10 })]
+	public void Ctor_ShouldThrow_WhenGivenBreakTriangleInequalityTheorem(double[] sides)
 	{
-		var circleCreation = () => new Triangle(4, 10, 2);
+		var triangleCreation = () => new Triangle(sides[0], sides[1], sides[2]);
 
-		circleCreation.Should()
-			.Throw<ValidationException>()
+		Array.Sort(sides);
+
+		triangleCreation.Should()
+			.Throw<ViolateTriangleInequalityTheoremException>()
 			.WithMessage("Каждая сторона треугольника должна быть " +
 				"меньше суммы двух других сторон: " +
-				$"{10} >= {2} + {4}");
+				$"{sides[2]} >= {sides[1]} + {sides[0]}");
 	}
 }
